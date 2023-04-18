@@ -14,13 +14,25 @@ import Typography from '@mui/material/Typography'
 import PropTypes from 'prop-types'
 
 import api from '../../../services/api'
-import { ProductsImg } from './styles'
-
-function Row({ row }) {
+import status from './order-status'
+import { ProductsImg, ReactSelectStyle } from './styles'
+function Row({ row, orders, setOrders }) {
   const [open, setOpen] = React.useState(false)
+  const [isLoading, setIsLoading] = React.useState(false)
 
   async function setNewStatus(id, status) {
-    await api.put(`orders/${id}`, { status })
+    setIsLoading(true)
+    try {
+      await api.put(`orders/${id}`, { status })
+      const newOrders = orders.map(order => {
+        return order._id === id ? { ...order, status } : order
+      })
+      setOrders(newOrders)
+    } catch (err) {
+      console.error(err)
+    } finally {
+      setIsLoading(false)
+    }
   }
 
   return (
@@ -40,7 +52,20 @@ function Row({ row }) {
         </TableCell>
         <TableCell>{row.name}</TableCell>
         <TableCell>{row.date}</TableCell>
-        <TableCell></TableCell>
+        <TableCell>
+          <ReactSelectStyle
+            options={status.filter(sts => sts.value !== 'Todos')}
+            menuPortalTarget={document.body}
+            placeholder="Status"
+            defaultValue={
+              status.find(option => option.value === row.status) || null
+            }
+            onChange={newStatus => {
+              setNewStatus(row.orderId, newStatus.value)
+            }}
+            isLoading={isLoading}
+          />
+        </TableCell>
       </TableRow>
       <TableRow>
         <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
@@ -82,6 +107,8 @@ function Row({ row }) {
 }
 
 Row.propTypes = {
+  orders: PropTypes.array,
+  setOrders: PropTypes.func,
   row: PropTypes.shape({
     name: PropTypes.string.isRequired,
     orderId: PropTypes.string.isRequired,
