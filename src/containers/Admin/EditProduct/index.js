@@ -10,7 +10,14 @@ import * as Yup from 'yup'
 
 import { ErrorMessage } from '../../../components'
 import api from '../../../services/api'
-import { Container, Label, Input, ButtonStyles, LabelUpload } from './styles'
+import {
+  Container,
+  Label,
+  Input,
+  ButtonStyles,
+  LabelUpload,
+  ContainerInput
+} from './styles'
 
 function EditProduct() {
   const [fileName, setFileName] = useState(null)
@@ -25,7 +32,8 @@ function EditProduct() {
   const schema = Yup.object().shape({
     name: Yup.string().required('Product name is a required field'),
     price: Yup.string().required('Product price is a required field'),
-    category: Yup.object().required('Choose a category')
+    category: Yup.object().required('Choose a category'),
+    offer: Yup.bool()
   })
   const {
     register,
@@ -42,6 +50,7 @@ function EditProduct() {
     productDataFormData.append('price', data.price)
     productDataFormData.append('categoryId', data.category.id)
     productDataFormData.append('file', data.file[0])
+    productDataFormData.append('offer', data.offer)
 
     await toast.promise(
       api.put(`products/${product.id}`, productDataFormData),
@@ -117,13 +126,22 @@ function EditProduct() {
                   getOptionLabel={cat => cat.name}
                   getOptionValue={cat => cat.id}
                   placeholder="Categories"
+                  defaultValue={product.category}
                 />
               )
             }}
           ></Controller>
           <ErrorMessage>{errors.category?.message}</ErrorMessage>
         </div>
-        <ButtonStyles>Add Product</ButtonStyles>
+        <ContainerInput>
+          <input
+            type="checkbox"
+            {...register('offer')}
+            defaultChecked={product.offer}
+          />
+          <Label>Product in offer?</Label>
+        </ContainerInput>
+        <ButtonStyles>Edit Product</ButtonStyles>
       </form>
     </Container>
   )

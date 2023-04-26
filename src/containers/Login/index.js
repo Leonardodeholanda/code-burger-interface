@@ -93,7 +93,7 @@ export function Login() {
           </Button>
         </form>
         <SingInLink>
-          Não possui conta?{' '}
+          Does not have an account?{' '}
           <Link style={{ color: 'white' }} to="/register">
             Sign Up
           </Link>

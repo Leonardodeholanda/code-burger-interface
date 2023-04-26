@@ -28,7 +28,7 @@ export function Products({ location: { state } }) {
     async function loadCategories() {
       const { data } = await api.get('categories')
 
-      const newCategories = [{ id: 0, name: 'Todas' }, ...data]
+      const newCategories = [{ id: 0, name: 'All' }, ...data]
       setCategories(newCategories)
     }
 

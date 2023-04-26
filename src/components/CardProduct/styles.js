@@ -5,7 +5,7 @@ export const Container = styled.div`
   box-shadow: 0px 30px 60px rgba(57, 57, 57, 0.1);
   border-radius: 20px;
   display: flex;
-  gap: 12px;
+  gap: 10px;
   padding: 16px;
   width: max-content;
 
@@ -16,7 +16,8 @@ export const Container = styled.div`
   }
 `
 export const Image = styled.img`
-  width: 150px;
+  width: 100%;
+  max-width: 150px;
   border-radius: 10px;
 `
 export const ProductName = styled.p`

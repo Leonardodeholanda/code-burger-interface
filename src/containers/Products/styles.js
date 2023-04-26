@@ -11,7 +11,7 @@ export const ProductsImg = styled.img`
 export const CategoriesMenu = styled.div`
   display: flex;
   justify-content: center;
-  gap: 50px;
+  gap: 5%;
   margin-top: 20px;
 `
 
